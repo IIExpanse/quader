@@ -1,2 +1,2 @@
-rootProject.name = "quarkus-trading-bot"
-include("app")
+rootProject.name = "quarkus-trader"
+include("bot")
