@@ -17,6 +17,8 @@ dependencies {
     implementation(platform("io.quarkus.platform:quarkus-bom:" + properties["quarkusPlatformVersion"]))
     implementation("io.quarkus:quarkus-grpc")
 
+    compileOnly("ru.tinkoff.piapi:java-sdk-grpc-contract:" + properties["tinkoffApiVersion"])
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
