@@ -1,2 +1,2 @@
-# quarkus-trading-bot
+# quarkus-trader
 Quarkus-based trading service
