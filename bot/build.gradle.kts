@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation(platform("io.quarkus.platform:quarkus-bom:" + properties["quarkusPlatformVersion"]))
     implementation("io.quarkus:quarkus-grpc")
+    implementation("org.ta4j:ta4j-core:" + properties["ta4jVersion"])
 
     compileOnly("ru.tinkoff.piapi:java-sdk-grpc-contract:" + properties["tinkoffApiVersion"])
 
