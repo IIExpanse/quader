@@ -3,7 +3,9 @@ package ru.expanse.factory;
 import ru.tinkoff.piapi.contract.v1.*;
 
 public class CandleRequestFactory {
-    public static MarketDataServerSideStreamRequest creaateDefaultCandleRequest(
+    private CandleRequestFactory() {}
+
+    public static MarketDataServerSideStreamRequest createDefaultCandleRequest(
             String instrumentId,
             SubscriptionInterval interval
     ) {

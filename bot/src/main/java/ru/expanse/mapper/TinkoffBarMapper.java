@@ -18,6 +18,8 @@ public interface TinkoffBarMapper {
     @Mapping(target = "highPrice", source = "candle.high")
     @Mapping(target = "lowPrice", source = "candle.low")
     @Mapping(target = "closePrice", source = "candle.close")
+    @Mapping(target = "amount", ignore = true)
+    @Mapping(target = "trades", ignore = true)
     BaseBar toBar(Candle candle);
 
     default Instant toEndTime(Candle candle) {

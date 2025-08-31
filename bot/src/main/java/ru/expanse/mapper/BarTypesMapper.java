@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.ta4j.core.num.DecimalNumFactory;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 import ru.tinkoff.piapi.contract.v1.Quotation;
 import ru.tinkoff.piapi.contract.v1.SubscriptionInterval;
 
@@ -12,6 +13,8 @@ import java.time.Instant;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI)
 public interface BarTypesMapper {
+    NumFactory NUM_FACTORY = DecimalNumFactory.getInstance();
+
     default Duration toDuration(SubscriptionInterval interval) {
         return switch (interval) {
             case SUBSCRIPTION_INTERVAL_ONE_MINUTE -> Duration.ofMinutes(1);
@@ -39,6 +42,10 @@ public interface BarTypesMapper {
     }
 
     default Num toNum(Quotation quotation) {
-        return DecimalNumFactory.getInstance().numOf(quotation.getUnits() + "." + quotation.getNano());
+        return NUM_FACTORY.numOf(quotation.getUnits() + "." + quotation.getNano());
+    }
+
+    default Num toNum(Number val) {
+        return NUM_FACTORY.numOf(val);
     }
 }
