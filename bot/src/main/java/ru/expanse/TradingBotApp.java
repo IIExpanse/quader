@@ -3,6 +3,7 @@ package ru.expanse;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
+import io.smallrye.mutiny.subscription.Cancellable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.expanse.broker.BrokerAdapter;
@@ -21,10 +22,17 @@ public class TradingBotApp implements QuarkusApplication {
     @Override
     public int run(String... args) {
         String instrumentId = brokerAdapter.findInstrumentId(TICKER)
-                .await().atMost(Duration.ofSeconds(10));
-        brokerAdapter.openBarsStreamForInstrument(instrumentId, SubscriptionInterval.SUBSCRIPTION_INTERVAL_ONE_MINUTE, 1)
+                .await().atMost(Duration.ofSeconds(5));
+
+        Cancellable cancellable = brokerAdapter.openBarsStreamForInstrument(
+                        instrumentId,
+                        SubscriptionInterval.SUBSCRIPTION_INTERVAL_ONE_MINUTE,
+                        1
+                )
                 .subscribe().with(bar -> log.info("Received bar: {}", bar.toString()));
+
         Quarkus.waitForExit();
+        cancellable.cancel();
         return 0;
     }
 }
