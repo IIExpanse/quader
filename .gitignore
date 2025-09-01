@@ -9,3 +9,4 @@ bin/
 .vscode/
 target/
 *.log
+*.env
