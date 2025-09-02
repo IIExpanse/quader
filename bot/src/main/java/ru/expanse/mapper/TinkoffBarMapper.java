@@ -1,13 +1,8 @@
 package ru.expanse.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.*;
 import org.ta4j.core.BaseBar;
 import ru.tinkoff.piapi.contract.v1.Candle;
-
-import java.time.Instant;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.CDI,
         uses = BarTypesMapper.class)
@@ -20,11 +15,5 @@ public interface TinkoffBarMapper {
     @Mapping(target = "closePrice", source = "candle.close")
     @Mapping(target = "amount", ignore = true)
     @Mapping(target = "trades", ignore = true)
-    BaseBar toBar(Candle candle);
-
-    default Instant toEndTime(Candle candle) {
-        BarTypesMapper barTypesMapper = Mappers.getMapper(BarTypesMapper.class);
-        return barTypesMapper.toInstant(candle.getTime())
-                .plus(barTypesMapper.toDuration(candle.getInterval()));
-    }
+    BaseBar toBar(Candle candle, @Context int lot);
 }

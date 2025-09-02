@@ -67,7 +67,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                 ))
                 .onFailure().retry().atMost(5)
                 .map(MarketDataResponse::getCandle)
-                .map(barMapper::toBar);
+                .map(candle -> barMapper.toBar(candle, lot));
     }
 
     private Map<String, String> getAuthHeader() {

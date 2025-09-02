@@ -1,10 +1,12 @@
 package ru.expanse.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.ta4j.core.num.DecimalNumFactory;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.NumFactory;
+import ru.tinkoff.piapi.contract.v1.Candle;
 import ru.tinkoff.piapi.contract.v1.Quotation;
 import ru.tinkoff.piapi.contract.v1.SubscriptionInterval;
 
@@ -41,8 +43,14 @@ public interface BarTypesMapper {
         return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
     }
 
-    default Num toNum(Quotation quotation) {
-        return NUM_FACTORY.numOf(quotation.getUnits() + "." + quotation.getNano());
+    default Instant toEndTime(Candle candle) {
+        return toInstant(candle.getTime())
+                .plus(toDuration(candle.getInterval()));
+    }
+
+    default Num toNum(Quotation quotation, @Context int multiplier) {
+        return NUM_FACTORY.numOf(quotation.getUnits() + "." + quotation.getNano())
+                .multipliedBy(NUM_FACTORY.numOf(multiplier));
     }
 
     default Num toNum(Number val) {
