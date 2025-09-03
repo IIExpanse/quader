@@ -1,11 +1,18 @@
 quarkus:
+  shutdown:
+    timeout: 5s
   generate-code:
     grpc:
       scan-for-proto: ru.tinkoff.piapi:java-sdk-grpc-contract
   grpc:
     clients:
       broker:
+        plain-text: false
+        use-quarkus-grpc-client: true
         host: ${BROKER_GRPC_HOST}
+        port: ${BROKER_GRPC_PORT}
+    dev-mode:
+      force-server-start: false
 broker:
   api:
     token: ${BROKER_API_TOKEN}
