@@ -3,8 +3,6 @@ quarkus:
     grpc:
       scan-for-proto: ru.tinkoff.piapi:java-sdk-grpc-contract
   grpc:
-    server:
-      port: ${GRPC_PORT}
     clients:
       broker:
         host: ${BROKER_GRPC_HOST}
