@@ -24,7 +24,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
     @GrpcClient("broker")
     InstrumentsService instrumentsClient;
     @ConfigProperty(name = "broker.api.token")
-    String apiKey;
+    String apiToken;
 
     private final TinkoffBarMapper barMapper;
 
@@ -32,9 +32,9 @@ public class TinkoffClientAdapter implements BrokerAdapter {
     private static final String BEARER_ = "Bearer ";
 
     @Override
-    public Uni<String> findInstrumentId(String ticker) {
+    public Uni<InstrumentShort> findFirstInstrumentByQuery(String query) {
         return Uni.createFrom().item(InstrumentRequestFactory
-                        .createFindInstrumentRequest(ticker, InstrumentType.INSTRUMENT_TYPE_SHARE)
+                        .createFindInstrumentRequest(query, InstrumentType.INSTRUMENT_TYPE_SHARE)
                 )
                 .flatMap(request -> GrpcClientHelper.callWithHeaders(
                                 instrumentsClient,
@@ -46,10 +46,10 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                 .onFailure().retry().atMost(5)
                 .invoke(response -> {
                     if (response.getInstrumentsCount() == 0) {
-                        throw new RuntimeException(String.format("No instrument found for ticker %s", ticker));
+                        throw new RuntimeException(String.format("No instrument found for ticker %s", query));
                     }
                 })
-                .map(response -> response.getInstruments(0).getUid());
+                .map(response -> response.getInstruments(0));
     }
 
     public Multi<Bar> openBarsStreamForInstrument(String instrumentId, SubscriptionInterval interval, int lot) {
@@ -62,11 +62,12 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                         getAuthHeader()
                 ))
                 .onFailure().retry().atMost(5)
+                .filter(MarketDataResponse::hasCandle)
                 .map(MarketDataResponse::getCandle)
                 .map(candle -> barMapper.toBar(candle, lot));
     }
 
     private Map<String, String> getAuthHeader() {
-        return Map.of(AUTHORIZATION, BEARER_ + apiKey);
+        return Map.of(AUTHORIZATION, BEARER_ + apiToken);
     }
 }
