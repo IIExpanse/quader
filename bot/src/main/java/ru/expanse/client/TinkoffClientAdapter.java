@@ -12,11 +12,7 @@ import ru.expanse.broker.BrokerAdapter;
 import ru.expanse.factory.CandleRequestFactory;
 import ru.expanse.factory.InstrumentRequestFactory;
 import ru.expanse.mapper.TinkoffBarMapper;
-import ru.tinkoff.piapi.contract.v1.InstrumentType;
-import ru.tinkoff.piapi.contract.v1.InstrumentsServiceClient;
-import ru.tinkoff.piapi.contract.v1.MarketDataResponse;
-import ru.tinkoff.piapi.contract.v1.MarketDataStreamServiceClient;
-import ru.tinkoff.piapi.contract.v1.SubscriptionInterval;
+import ru.tinkoff.piapi.contract.v1.*;
 
 import java.util.Map;
 
@@ -24,13 +20,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TinkoffClientAdapter implements BrokerAdapter {
     @GrpcClient("broker")
-    private final MarketDataStreamServiceClient marketDataClient;
+    MarketDataStreamService marketDataClient;
     @GrpcClient("broker")
-    private final InstrumentsServiceClient instrumentsClient;
-    private final TinkoffBarMapper barMapper;
-
+    InstrumentsService instrumentsClient;
     @ConfigProperty(name = "broker.api.token")
-    private String apiKey;
+    String apiKey;
+
+    private final TinkoffBarMapper barMapper;
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER_ = "Bearer ";
@@ -43,7 +39,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                 .flatMap(request -> GrpcClientHelper.callWithHeaders(
                                 instrumentsClient,
                                 request,
-                                InstrumentsServiceClient::findInstrument,
+                                InstrumentsService::findInstrument,
                                 getAuthHeader()
                         )
                 )
@@ -62,7 +58,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                 .onItem().transformToMulti(request -> GrpcClientHelper.callWithHeaders(
                         marketDataClient,
                         request,
-                        MarketDataStreamServiceClient::marketDataServerSideStream,
+                        MarketDataStreamService::marketDataServerSideStream,
                         getAuthHeader()
                 ))
                 .onFailure().retry().atMost(5)
