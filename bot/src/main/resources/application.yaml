@@ -1,10 +1,17 @@
 quarkus:
+  log:
+    category:
+      "io.quarkus.grpc":
+        level: debug
+    level: debug
   shutdown:
     timeout: 5s
   generate-code:
     grpc:
       scan-for-proto: ru.tinkoff.piapi:java-sdk-grpc-contract
   grpc:
+    server:
+      port: 9001
     clients:
       broker:
         plain-text: false

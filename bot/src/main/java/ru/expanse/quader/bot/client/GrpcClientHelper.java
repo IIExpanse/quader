@@ -1,4 +1,4 @@
-package ru.expanse.client;
+package ru.expanse.quader.bot.client;
 
 import io.grpc.Metadata;
 import io.quarkus.grpc.GrpcClientUtils;

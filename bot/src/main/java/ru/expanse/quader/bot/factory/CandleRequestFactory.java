@@ -1,11 +1,11 @@
-package ru.expanse.factory;
+package ru.expanse.quader.bot.factory;
 
 import ru.tinkoff.piapi.contract.v1.*;
 
 public class CandleRequestFactory {
     private CandleRequestFactory() {}
 
-    public static MarketDataServerSideStreamRequest createDefaultCandleRequest(
+    public static MarketDataRequest createDefaultCandleRequest(
             String instrumentId,
             SubscriptionInterval interval
     ) {
@@ -15,7 +15,7 @@ public class CandleRequestFactory {
                 .setWaitingClose(true)
                 .build();
 
-        return MarketDataServerSideStreamRequest.newBuilder()
+        return MarketDataRequest.newBuilder()
                 .setSubscribeCandlesRequest(request)
                 .build();
     }

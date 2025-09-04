@@ -1,4 +1,4 @@
-package ru.expanse.factory;
+package ru.expanse.quader.bot.factory;
 
 import ru.tinkoff.piapi.contract.v1.FindInstrumentRequest;
 import ru.tinkoff.piapi.contract.v1.InstrumentType;

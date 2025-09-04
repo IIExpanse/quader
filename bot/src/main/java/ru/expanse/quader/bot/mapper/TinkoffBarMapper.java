@@ -1,4 +1,4 @@
-package ru.expanse.mapper;
+package ru.expanse.quader.bot.mapper;
 
 import org.mapstruct.*;
 import org.ta4j.core.BaseBar;

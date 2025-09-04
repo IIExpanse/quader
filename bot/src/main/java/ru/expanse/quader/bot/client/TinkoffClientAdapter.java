@@ -1,4 +1,4 @@
-package ru.expanse.client;
+package ru.expanse.quader.bot.client;
 
 
 import io.quarkus.grpc.GrpcClient;
@@ -6,21 +6,22 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.ta4j.core.Bar;
-import ru.expanse.broker.BrokerAdapter;
-import ru.expanse.factory.CandleRequestFactory;
-import ru.expanse.factory.InstrumentRequestFactory;
-import ru.expanse.mapper.TinkoffBarMapper;
+import ru.expanse.quader.bot.broker.BrokerAdapter;
+import ru.expanse.quader.bot.factory.InstrumentRequestFactory;
+import ru.expanse.quader.bot.mapper.TinkoffBarMapper;
 import ru.tinkoff.piapi.contract.v1.*;
 
 import java.util.Map;
 
 @ApplicationScoped
 @RequiredArgsConstructor
+@Slf4j
 public class TinkoffClientAdapter implements BrokerAdapter {
     @GrpcClient("broker")
-    MarketDataStreamService marketDataClient;
+    MutinyMarketDataStreamServiceGrpc.MutinyMarketDataStreamServiceStub marketDataClient;
     @GrpcClient("broker")
     InstrumentsService instrumentsClient;
     @ConfigProperty(name = "broker.api.token")
@@ -52,16 +53,15 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                 .map(response -> response.getInstruments(0));
     }
 
-    public Multi<Bar> openBarsStreamForInstrument(String instrumentId, SubscriptionInterval interval, int lot) {
-        return Uni.createFrom().item(CandleRequestFactory
-                        .createDefaultCandleRequest(instrumentId, interval))
-                .onItem().transformToMulti(request -> GrpcClientHelper.callWithHeaders(
+    public Multi<Bar> openBarsStreamForInstrument(Multi<MarketDataRequest> requestMulti, int lot) {
+        return GrpcClientHelper.callWithHeaders(
                         marketDataClient,
-                        request,
-                        MarketDataStreamService::marketDataServerSideStream,
+                        requestMulti,
+                        MutinyMarketDataStreamServiceGrpc.MutinyMarketDataStreamServiceStub::marketDataStream,
                         getAuthHeader()
-                ))
+                )
                 .onFailure().retry().atMost(5)
+                .invoke(response -> log.info("Received response: {}", response.toString()))
                 .filter(MarketDataResponse::hasCandle)
                 .map(MarketDataResponse::getCandle)
                 .map(candle -> barMapper.toBar(candle, lot));

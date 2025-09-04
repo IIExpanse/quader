@@ -1,4 +1,4 @@
-package ru.expanse.mapper;
+package ru.expanse.quader.bot.mapper;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
