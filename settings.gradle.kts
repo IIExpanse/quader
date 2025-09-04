@@ -1,4 +1,4 @@
-rootProject.name = "quarkus-trader"
+rootProject.name = "quader"
 include("bot")
 
 pluginManagement {

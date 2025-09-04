@@ -1,2 +1,2 @@
-# quarkus-trader
-Quarkus-based trading service
+# quader
+Application for automated stock trading
