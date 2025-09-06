@@ -28,20 +28,20 @@ public class TradingBotApp implements QuarkusApplication {
     public int run(String... args) {
         InstrumentShort instrument = brokerAdapter.findFirstInstrumentByQuery(TICKER)
                 .await().atMost(Duration.ofSeconds(5));
+        Cancellable cancellable;
+
         try (SubmissionPublisher<MarketDataRequest> requestPublisher = new SubmissionPublisher<>()) {
             Multi<MarketDataRequest> requestMulti = Multi.createFrom().publisher(requestPublisher);
 
-            Cancellable cancellable = brokerAdapter.openBarsStreamForInstrument(requestMulti, instrument.getLot())
+            cancellable = brokerAdapter.openBarsStreamForInstrument(requestMulti, instrument.getLot())
                     .subscribe().with(bar -> log.info("Received bar: {}", bar.toString()),
                             error -> log.info("Received error: {}", error.toString()),
                             () -> log.info("Stream completed"));
 
             requestPublisher.submit(CandleRequestFactory.createDefaultCandleRequest(instrument.getUid(), SubscriptionInterval.SUBSCRIPTION_INTERVAL_ONE_MINUTE));
-            log.info("HAS SUBSCRIBERS: {}", requestPublisher.hasSubscribers());
-            log.info("Number of subscribers: {}", requestPublisher.getNumberOfSubscribers());
             Quarkus.waitForExit();
-            cancellable.cancel();
         }
+        cancellable.cancel();
         return 0;
     }
 }

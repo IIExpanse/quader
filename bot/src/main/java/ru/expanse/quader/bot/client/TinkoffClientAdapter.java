@@ -15,13 +15,14 @@ import ru.expanse.quader.bot.mapper.TinkoffBarMapper;
 import ru.tinkoff.piapi.contract.v1.*;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 @Slf4j
 public class TinkoffClientAdapter implements BrokerAdapter {
     @GrpcClient("broker")
-    MutinyMarketDataStreamServiceGrpc.MutinyMarketDataStreamServiceStub marketDataClient;
+    MarketDataStreamService marketDataClient;
     @GrpcClient("broker")
     InstrumentsService instrumentsClient;
     @ConfigProperty(name = "broker.api.token")
@@ -30,7 +31,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
     private final TinkoffBarMapper barMapper;
 
     private static final String AUTHORIZATION = "Authorization";
-    private static final String BEARER_ = "Bearer ";
+    private static final String BEARER = "Bearer ";
 
     @Override
     public Uni<InstrumentShort> findFirstInstrumentByQuery(String query) {
@@ -47,7 +48,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                 .onFailure().retry().atMost(5)
                 .invoke(response -> {
                     if (response.getInstrumentsCount() == 0) {
-                        throw new RuntimeException(String.format("No instrument found for ticker %s", query));
+                        throw new NoSuchElementException(String.format("No instrument found for ticker %s", query));
                     }
                 })
                 .map(response -> response.getInstruments(0));
@@ -57,7 +58,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
         return GrpcClientHelper.callWithHeaders(
                         marketDataClient,
                         requestMulti,
-                        MutinyMarketDataStreamServiceGrpc.MutinyMarketDataStreamServiceStub::marketDataStream,
+                        MarketDataStreamService::marketDataStream,
                         getAuthHeader()
                 )
                 .onFailure().retry().atMost(5)
@@ -68,6 +69,6 @@ public class TinkoffClientAdapter implements BrokerAdapter {
     }
 
     private Map<String, String> getAuthHeader() {
-        return Map.of(AUTHORIZATION, BEARER_ + apiToken);
+        return Map.of(AUTHORIZATION, BEARER + apiToken);
     }
 }

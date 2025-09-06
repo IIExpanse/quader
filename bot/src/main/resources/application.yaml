@@ -1,9 +1,9 @@
 quarkus:
-  log:
-    category:
-      "io.quarkus.grpc":
-        level: debug
-    level: debug
+#  log:
+#    category:
+#      "io.quarkus.grpc":
+#        level: debug
+#    level: debug
   shutdown:
     timeout: 5s
   generate-code:
@@ -15,6 +15,10 @@ quarkus:
     clients:
       broker:
         plain-text: false
+        tls:
+          enabled: true
+          trust-certificate-pem:
+            certs: russian_trusted_root_ca.cer
         use-quarkus-grpc-client: true
         host: ${BROKER_GRPC_HOST}
         port: ${BROKER_GRPC_PORT}
