@@ -4,18 +4,18 @@ import com.google.protobuf.Empty;
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
-import ru.expanse.quader.bot.api.contract.ShutDownRequest;
-import ru.expanse.quader.bot.api.contract.ShutDownService;
-import ru.expanse.quader.bot.service.ShutdownService;
+import ru.expanse.quader.bot.service.ShutdownOperation;
+import ru.expanse.quader.lib.api.proto.ShutDownRequest;
+import ru.expanse.quader.lib.api.proto.ShutDownService;
 
 @GrpcService
 @RequiredArgsConstructor
 public class ShutDownController implements ShutDownService {
-    private final ShutdownService shutdownService;
+    private final ShutdownOperation shutdownOperation;
 
     @Override
     public Uni<Empty> shutDown(ShutDownRequest request) {
-        return shutdownService.shutDown(request.getOperationKey())
+        return shutdownOperation.shutDown(request.getOperationKey())
                 .replaceWith(Empty.newBuilder().build());
     }
 }

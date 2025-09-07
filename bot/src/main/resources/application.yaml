@@ -8,7 +8,7 @@ quarkus:
     timeout: 5s
   generate-code:
     grpc:
-      scan-for-proto: ru.tinkoff.piapi:java-sdk-grpc-contract
+      scan-for-proto: ru.expanse.quader:lib, ru.tinkoff.piapi:java-sdk-grpc-contract
   grpc:
     server:
       port: 9001

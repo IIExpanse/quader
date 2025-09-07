@@ -3,6 +3,9 @@ plugins {
     id("io.quarkus")
 }
 
+group = "ru.expanse.quader"
+version = "1.0.0-SNAPSHOT"
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -14,7 +17,7 @@ sourceSets {
         java {
             srcDirs(
                 "${projectDir}/src/main/java",
-                "${projectDir}/build/classes/java/quarkus-generated-sources"
+                "${projectDir}/build/classes/java/quarkus-generated-sources/grpc"
             )
         }
     }
@@ -39,7 +42,8 @@ dependencies {
     compileOnly(
         "ru.tinkoff.piapi:java-sdk-grpc-contract:${properties["tinkoffApiVersion"]}",
         "org.mapstruct:mapstruct:${properties["mapstructVersion"]}",
-        "org.projectlombok:lombok:${properties["lombokVersion"]}"
+        "org.projectlombok:lombok:${properties["lombokVersion"]}",
+        project(":lib")
     )
     annotationProcessor(
         "org.projectlombok:lombok:${properties["lombokVersion"]}",

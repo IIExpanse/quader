@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package ru.expanse.quader.bot.api.contract;
+package ru.expanse.quader.lib.api.proto;
 
-option java_package = "ru.expanse.quader.bot.api.contract";
+option java_package = "ru.expanse.quader.lib.api.proto";
 option java_multiple_files = true;
 
 import "google/protobuf/empty.proto";

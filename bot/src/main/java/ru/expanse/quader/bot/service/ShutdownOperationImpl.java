@@ -5,7 +5,7 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class ShutdownServiceImpl implements ShutdownService {
+public class ShutdownOperationImpl implements ShutdownOperation {
     // todo: add operationKey generation and verification
     @Override
     public Uni<Void> shutDown(String operationKey) {
