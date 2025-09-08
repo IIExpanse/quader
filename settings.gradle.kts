@@ -1,6 +1,8 @@
 rootProject.name = "quader"
-include("bot")
 include("lib")
+include("bot")
+include("bot-manager-service")
+include("control-panel-service")
 
 pluginManagement {
     val quarkusPluginVersion: String by settings
