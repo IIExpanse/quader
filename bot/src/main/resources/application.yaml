@@ -11,7 +11,7 @@ quarkus:
       scan-for-proto: ru.expanse.quader:lib, ru.tinkoff.piapi:java-sdk-grpc-contract
   grpc:
     server:
-      port: 9001
+      use-separate-server: false
     clients:
       broker:
         plain-text: false
@@ -22,8 +22,11 @@ quarkus:
         use-quarkus-grpc-client: true
         host: ${BROKER_GRPC_HOST}
         port: ${BROKER_GRPC_PORT}
-    dev-mode:
-      force-server-start: false
 broker:
   api:
     token: ${BROKER_API_TOKEN}
+
+"%dev":
+  quarkus:
+    http:
+      port: 8080
