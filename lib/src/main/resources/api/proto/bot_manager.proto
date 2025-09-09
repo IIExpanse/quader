@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ru.expanse.quader.lib.api.proto.botmanager;
+
+option java_package = "ru.expanse.quader.lib.api.proto.botmanager";
+option java_multiple_files = true;
+
+import "google/protobuf/empty.proto";
+
+service ShutDownService {
+    rpc ShutDownBot(ShutDownRequest) returns (google.protobuf.Empty);
+}
+
+message ShutDownRequest {
+    string operation_key = 1;
+}

@@ -5,8 +5,8 @@ import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 import ru.expanse.quader.bot.service.ShutdownOperation;
-import ru.expanse.quader.lib.api.proto.ShutDownRequest;
-import ru.expanse.quader.lib.api.proto.ShutDownService;
+import ru.expanse.quader.lib.api.proto.bot.ShutDownRequest;
+import ru.expanse.quader.lib.api.proto.bot.ShutDownService;
 
 @GrpcService
 @RequiredArgsConstructor
