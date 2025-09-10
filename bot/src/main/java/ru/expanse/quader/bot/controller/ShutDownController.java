@@ -6,11 +6,11 @@ import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 import ru.expanse.quader.bot.service.ShutdownOperation;
 import ru.expanse.quader.lib.api.proto.bot.ShutDownRequest;
-import ru.expanse.quader.lib.api.proto.bot.ShutDownService;
+import ru.expanse.quader.lib.api.proto.bot.ShutDownBotService;
 
 @GrpcService
 @RequiredArgsConstructor
-public class ShutDownController implements ShutDownService {
+public class ShutDownController implements ShutDownBotService {
     private final ShutdownOperation shutdownOperation;
 
     @Override
