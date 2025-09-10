@@ -1,4 +1,4 @@
-package ru.expanse.quader.bot.client;
+package ru.expanse.quader.bot.client.impl;
 
 
 import io.quarkus.grpc.GrpcClient;
@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.ta4j.core.Bar;
-import ru.expanse.quader.bot.broker.BrokerAdapter;
+import ru.expanse.quader.bot.client.BrokerAdapter;
+import ru.expanse.quader.bot.client.GrpcClientHelper;
 import ru.expanse.quader.bot.factory.InstrumentRequestFactory;
 import ru.expanse.quader.bot.mapper.TinkoffBarMapper;
 import ru.tinkoff.piapi.contract.v1.*;

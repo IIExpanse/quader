@@ -1,4 +1,4 @@
-package ru.expanse.quader.bot.broker;
+package ru.expanse.quader.bot.client;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

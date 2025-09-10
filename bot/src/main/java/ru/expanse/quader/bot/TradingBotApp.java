@@ -7,7 +7,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.subscription.Cancellable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.expanse.quader.bot.broker.BrokerAdapter;
+import ru.expanse.quader.bot.client.BrokerAdapter;
 import ru.expanse.quader.bot.factory.CandleRequestFactory;
 import ru.tinkoff.piapi.contract.v1.InstrumentShort;
 import ru.tinkoff.piapi.contract.v1.MarketDataRequest;
