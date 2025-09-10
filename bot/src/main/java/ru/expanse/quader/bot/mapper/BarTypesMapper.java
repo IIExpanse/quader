@@ -44,16 +44,25 @@ public interface BarTypesMapper {
     }
 
     default Instant toEndTime(Candle candle) {
+        if (candle == null) {
+            return null;
+        }
         return toInstant(candle.getTime())
                 .plus(toDuration(candle.getInterval()));
     }
 
     default Num toNum(Quotation quotation, @Context int multiplier) {
+        if (quotation == null) {
+            return null;
+        }
         return NUM_FACTORY.numOf(quotation.getUnits() + "." + quotation.getNano())
                 .multipliedBy(NUM_FACTORY.numOf(multiplier));
     }
 
     default Num toNum(Number val) {
+        if (val == null) {
+            return null;
+        }
         return NUM_FACTORY.numOf(val);
     }
 }
