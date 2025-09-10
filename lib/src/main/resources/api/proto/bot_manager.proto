@@ -7,10 +7,10 @@ option java_multiple_files = true;
 
 import "google/protobuf/empty.proto";
 
-service ShutDownService {
-    rpc ShutDownBot(ShutDownRequest) returns (google.protobuf.Empty);
+service ShutDownCommandService {
+    rpc ShutDown(ShutDownRequest) returns (google.protobuf.Empty);
 }
 
 message ShutDownRequest {
-    string operation_key = 1;
+    string bot_id = 1;
 }
