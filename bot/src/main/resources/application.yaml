@@ -1,32 +1,59 @@
-quarkus:
-#  log:
-#    category:
-#      "io.quarkus.grpc":
-#        level: debug
-#    level: debug
-  shutdown:
-    timeout: 5s
-  generate-code:
+"%prod":
+  quarkus:
+    #  log:
+    #    category:
+    #      "io.quarkus.grpc":
+    #        level: debug
+    #    level: debug
+    shutdown:
+      timeout: 5s
+    generate-code:
+      grpc:
+        scan-for-proto: ru.expanse.quader:lib, ru.tinkoff.piapi:java-sdk-grpc-contract
     grpc:
-      scan-for-proto: ru.expanse.quader:lib, ru.tinkoff.piapi:java-sdk-grpc-contract
-  grpc:
-    server:
-      use-separate-server: false
-    clients:
-      broker:
-        plain-text: false
-        tls:
-          enabled: true
-          trust-certificate-pem:
-            certs: russian_trusted_root_ca.cer
-        use-quarkus-grpc-client: true
-        host: ${BROKER_GRPC_HOST}
-        port: ${BROKER_GRPC_PORT}
-broker:
-  api:
-    token: ${BROKER_API_TOKEN}
+      server:
+        use-separate-server: false
+      clients:
+        broker-client:
+          plain-text: false
+          tls:
+            enabled: true
+            trust-certificate-pem:
+              certs: russian_trusted_root_ca.cer
+          use-quarkus-grpc-client: true
+          host: ${BROKER_GRPC_HOST}
+          port: ${BROKER_GRPC_PORT}
+  broker-client:
+    api:
+      token: ${BROKER_API_TOKEN}
 
 "%dev":
   quarkus:
     http:
       port: 8080
+    #  log:
+    #    category:
+    #      "io.quarkus.grpc":
+    #        level: debug
+    #    level: debug
+    shutdown:
+      timeout: 5s
+    generate-code:
+      grpc:
+        scan-for-proto: ru.expanse.quader:lib, ru.tinkoff.piapi:java-sdk-grpc-contract
+    grpc:
+      server:
+        use-separate-server: false
+      clients:
+        broker-client:
+          plain-text: false
+          tls:
+            enabled: true
+            trust-certificate-pem:
+              certs: russian_trusted_root_ca.cer
+          use-quarkus-grpc-client: true
+          host: ${BROKER_GRPC_HOST}
+          port: ${BROKER_GRPC_PORT}
+  broker-client:
+    api:
+      token: ${BROKER_API_TOKEN}
