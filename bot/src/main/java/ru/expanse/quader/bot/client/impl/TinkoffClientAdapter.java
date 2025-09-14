@@ -22,11 +22,11 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 public class TinkoffClientAdapter implements BrokerAdapter {
-    @GrpcClient("broker")
+    @GrpcClient("broker-client")
     MarketDataStreamService marketDataClient;
-    @GrpcClient("broker")
+    @GrpcClient("broker-client")
     InstrumentsService instrumentsClient;
-    @ConfigProperty(name = "broker.api.token")
+    @ConfigProperty(name = "broker-client.api.token")
     String apiToken;
 
     private final TinkoffBarMapper barMapper;
