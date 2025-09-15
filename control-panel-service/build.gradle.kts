@@ -35,6 +35,7 @@ repositories {
 dependencies {
     implementation(
         platform("io.quarkus.platform:quarkus-bom:${properties["quarkusPlatformVersion"]}"),
+        "io.quarkus:quarkus-rest",
         "io.quarkus:quarkus-grpc",
         "io.quarkus:quarkus-config-yaml"
     )

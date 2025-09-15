@@ -1,4 +1,7 @@
 package ru.expanse.quader.controlpanel.service;
 
-public class CommandService {
+import io.smallrye.mutiny.Uni;
+
+public interface CommandService {
+    Uni<Void> shutDownBot(String botId);
 }
