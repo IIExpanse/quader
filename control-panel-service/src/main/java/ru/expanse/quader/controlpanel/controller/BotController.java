@@ -12,9 +12,9 @@ import ru.expanse.quader.controlpanel.service.CommandService;
 public class BotController {
     private final CommandService commandService;
 
-    @Path("shutdown/{id}")
+    @Path("shutdown/{botId}")
     @POST()
-    public Uni<Void> shutDownBot(@RestPath String id) {
-        return null;
+    public Uni<Void> shutDownBot(@RestPath String botId) {
+        return commandService.shutDownBot(botId);
     }
 }
