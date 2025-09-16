@@ -21,7 +21,6 @@
        port: 8081
      grpc:
        server:
-         port: 8081
          use-separate-server: false
        clients:
          bot-client:
