@@ -1,17 +1,27 @@
-quarkus:
-  generate-code:
+"%prod":
+  quarkus:
+    generate-code:
+      grpc:
+        scan-for-proto: ru.expanse.quader:lib
     grpc:
-      scan-for-proto: ru.expanse.quader:lib
-  grpc:
-    server:
-      use-separate-server: false
-    clients:
-      bot-manager:
-        use-quarkus-grpc-client: true
-        host: ${BOT_MANAGER_GRPC_HOST}
-        port: ${BOT_MANAGER_GRPC_PORT}
+      server:
+        use-separate-server: false
+      clients:
+        bot-manager-client:
+          use-quarkus-grpc-client: true
+          host: ${BOT_MANAGER_GRPC_HOST}
+          port: ${BOT_MANAGER_GRPC_PORT}
 
 "%dev":
-   quarkus:
-     http:
-       port: 8082
+  quarkus:
+    generate-code:
+      grpc:
+        scan-for-proto: ru.expanse.quader:lib
+    http:
+      port: 8082
+    grpc:
+      clients:
+        bot-client:
+          use-quarkus-grpc-client: true
+          host: localhost
+          port: 8081
