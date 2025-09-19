@@ -6,7 +6,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.ta4j.core.Bar;
 import ru.expanse.quader.bot.client.BrokerAdapter;
@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class TinkoffClientAdapter implements BrokerAdapter {
     @GrpcClient("broker-client")
     MarketDataStreamService marketDataClient;
@@ -39,6 +39,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
         return Uni.createFrom().item(InstrumentRequestFactory
                         .createFindInstrumentRequest(query, InstrumentType.INSTRUMENT_TYPE_SHARE)
                 )
+                .invoke(() -> log.trace("Starting to send findFirstInstrumentByQuery request."))
                 .flatMap(request -> GrpcClientHelper.callWithHeaders(
                                 instrumentsClient,
                                 request,
@@ -47,6 +48,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                         )
                 )
                 .onFailure().retry().atMost(5)
+                .invoke(() -> log.trace("Received response from findFirstInstrumentByQuery request."))
                 .invoke(response -> {
                     if (response.getInstrumentsCount() == 0) {
                         throw new NoSuchElementException(String.format("No instrument found for ticker %s", query));
@@ -63,7 +65,7 @@ public class TinkoffClientAdapter implements BrokerAdapter {
                         getAuthHeader()
                 )
                 .onFailure().retry().atMost(5)
-                .invoke(response -> log.info("Received response: {}", response.toString()))
+                .invoke(response -> log.debug("Received response: {}", response.toString()))
                 .filter(MarketDataResponse::hasCandle)
                 .map(MarketDataResponse::getCandle)
                 .map(candle -> barMapper.toBar(candle, lot));
