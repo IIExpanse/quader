@@ -20,8 +20,10 @@
     http:
       port: 8082
     grpc:
+      server:
+        use-separate-server: false
       clients:
-        bot-client:
+        bot-manager-client:
           use-quarkus-grpc-client: true
           host: localhost
           port: 8081
