@@ -1,0 +1,28 @@
+services:
+  bot:
+    build: ./bot
+    image: bot
+    container_name: bot-container
+    ports:
+      - "8080:8080"
+    env_file: ".env"
+
+  bot-manager-service:
+    build: ./bot-manager-service
+    image: bot-manager-service
+    container_name: bot-manager-service-container
+    ports:
+      - "8080:8080"
+    environment:
+      - BOT_GRPC_HOST=bot
+      - BOT_GRPC_PORT=8080
+
+  control-panel-service:
+    build: ./control-panel-service
+    image: control-panel-service
+    container_name: control-panel-service-container
+    ports:
+      - "8080:8080"
+    environment:
+      - BOT_MANAGER_GRPC_HOST=bot-manager-service
+      - BOT_MANAGER_GRPC_PORT=8080
