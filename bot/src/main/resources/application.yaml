@@ -1,10 +1,17 @@
 "%prod":
   quarkus:
-    #  log:
-    #    category:
-    #      "io.quarkus.grpc":
-    #        level: debug
-    #    level: debug
+    application:
+      name: bot
+    log:
+      console:
+        json:
+          enabled: false
+      socket:
+        enabled: true
+        endpoint: fluent-bit:9880
+        json:
+          enabled: true
+          log-format: ecs
     shutdown:
       timeout: 5s
     generate-code:
@@ -29,13 +36,14 @@
 
 "%dev":
   quarkus:
+    log:
+      console:
+        json:
+          enabled: false
+      socket:
+        enabled: false
     http:
       port: 8080
-    #  log:
-    #    category:
-    #      "io.quarkus.grpc":
-    #        level: debug
-    #    level: debug
     shutdown:
       timeout: 5s
     generate-code:

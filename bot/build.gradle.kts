@@ -37,6 +37,7 @@ dependencies {
         platform("io.quarkus.platform:quarkus-bom:${properties["quarkusPlatformVersion"]}"),
         "io.quarkus:quarkus-grpc",
         "io.quarkus:quarkus-config-yaml",
+        "io.quarkus:quarkus-logging-json",
         "org.jboss.logmanager:log4j2-jboss-logmanager",
         "org.ta4j:ta4j-core:${properties["ta4jVersion"]}"
     )
