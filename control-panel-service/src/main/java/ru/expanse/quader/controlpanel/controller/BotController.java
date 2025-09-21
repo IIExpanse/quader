@@ -22,6 +22,6 @@ public class BotController {
         return Uni.createFrom().nullItem()
                 .invoke(() -> log.info("Received shutdown request for bot with id={}", botId))
                 .flatMap(empty -> commandService.shutDownBot(botId))
-                .invoke(() -> log.info("Finished processing request for bot with id={}", botId));
+                .invoke(() -> log.info("Finished processing shutdown request for bot with id={}", botId));
     }
 }

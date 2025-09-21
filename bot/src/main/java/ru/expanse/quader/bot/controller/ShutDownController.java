@@ -20,7 +20,7 @@ public class ShutDownController implements ShutDownBotService {
         return Uni.createFrom().nullItem()
                 .invoke(() -> log.info("Received shutdown request with operationKey={}", request.getOperationKey()))
                 .flatMap(empty -> shutdownOperation.shutDown(request.getOperationKey()))
-                .invoke(() -> log.info("Finished processing shutdown request"))
+                .invoke(() -> log.info("Finished processing shutdown request with operationKey={}", request.getOperationKey()))
                 .replaceWith(Empty.newBuilder().build());
     }
 }

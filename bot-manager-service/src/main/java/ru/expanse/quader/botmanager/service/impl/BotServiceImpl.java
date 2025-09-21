@@ -20,7 +20,7 @@ public class BotServiceImpl implements BotService {
         return Uni.createFrom().nullItem()
                 .invoke(() -> log.trace("Starting resolving operationKey for botId={}", botId))
                 .map(empty -> botDataResolver.resolve(botId).operationKey())
-                .invoke(operationKey -> log.trace("Resolved botId into operationKey={}", operationKey))
+                .invoke(operationKey -> log.trace("Resolved botId={} into operationKey={}", botId, operationKey))
                 .flatMap(botClientAdapter::shutDownBot);
     }
 }
