@@ -1,0 +1,26 @@
+service:
+  flush: 1
+  log_level: trace
+  http_server: true
+  http_listen: 0.0.0.0
+  http_port: 2020
+  hot_reload: on
+
+pipeline:
+  inputs:
+    - name: tcp
+      listen: 0.0.0.0
+      port: 9880
+      format: json
+
+  outputs:
+    - name: es
+      match: '*'
+      host: elasticsearch
+      port: 9200
+      logstash_prefix: fluent-bit
+      logstash_format: true
+      suppress_type_name: on
+
+    - name: stdout
+      match: '*'

@@ -3,19 +3,15 @@ services:
     build: ./bot
     image: bot
     container_name: bot-container
-    ports:
-      - "8080:8080"
     env_file: ".env"
 
   bot-manager-service:
     build: ./bot-manager-service
     image: bot-manager-service
     container_name: bot-manager-service-container
-    ports:
-      - "8080:8080"
     environment:
-      - BOT_GRPC_HOST=bot
-      - BOT_GRPC_PORT=8080
+      BOT_GRPC_HOST: "bot"
+      BOT_GRPC_PORT: "8080"
 
   control-panel-service:
     build: ./control-panel-service
@@ -24,5 +20,39 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - BOT_MANAGER_GRPC_HOST=bot-manager-service
-      - BOT_MANAGER_GRPC_PORT=8080
+      BOT_MANAGER_GRPC_HOST: "bot-manager-service"
+      BOT_MANAGER_GRPC_PORT: "8080"
+
+  fluent-bit:
+    image: fluent/fluent-bit:latest
+    command: ["-c", "/fluent-bit/etc/fluent-bit.yaml"]
+    ports:
+      - "2020:2020"
+    volumes:
+      - source: ./fluent-bit
+        target: /fluent-bit/etc
+        type: bind
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: elasticsearch:9.1.4
+    expose:
+      - 9200
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      discovery.type: "single-node"
+      cluster.routing.allocation.disk.threshold_enabled: false
+      xpack.security.enabled: false
+      xpack.security.http.ssl.enabled: false
+      xpack.security.enrollment.enabled: false
+
+  kibana:
+    image: kibana:9.1.4
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
