@@ -5,8 +5,7 @@ include("bot-manager-service")
 include("control-panel-service")
 
 pluginManagement {
-    val quarkusPluginVersion: String by settings
     plugins {
-        id("io.quarkus") version quarkusPluginVersion
+        id("io.quarkus") version requireNotNull(extra["quarkusPluginVersion"].toString())
     }
 }
