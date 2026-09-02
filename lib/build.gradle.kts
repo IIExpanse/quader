@@ -32,6 +32,13 @@ repositories {
 
 dependencies {
     implementation(
-        platform("io.quarkus.platform:quarkus-bom:${properties["quarkusPlatformVersion"]}")
+        platform("io.quarkus.platform:quarkus-bom:${findProp("quarkusPlatformVersion")}")
     )
+}
+
+// todo: make this shared, remove duplicates
+fun findProp(arg: String) : String {
+    val res = project.findProperty(arg)
+    requireNotNull(res)
+    return res.toString()
 }

@@ -34,28 +34,28 @@ repositories {
 
 dependencies {
     implementation(
-        platform("io.quarkus.platform:quarkus-bom:${properties["quarkusPlatformVersion"]}"),
+        platform("io.quarkus.platform:quarkus-bom:${findProp("quarkusPlatformVersion")}"),
         "io.quarkus:quarkus-rest",
         "io.quarkus:quarkus-grpc",
         "io.quarkus:quarkus-config-yaml",
         "org.jboss.logmanager:log4j2-jboss-logmanager"
     )
     compileOnly(
-        "org.mapstruct:mapstruct:${properties["mapstructVersion"]}",
-        "org.projectlombok:lombok:${properties["lombokVersion"]}",
+        "org.mapstruct:mapstruct:${findProp("mapstructVersion")}",
+        "org.projectlombok:lombok:${findProp("lombokVersion")}",
         project(":lib")
     )
     annotationProcessor(
-        "org.projectlombok:lombok:${properties["lombokVersion"]}",
-        "org.mapstruct:mapstruct-processor:${properties["mapstructVersion"]}",
-        "org.projectlombok:lombok-mapstruct-binding:${properties["lombokMapstructBindingVersion"]}"
+        "org.projectlombok:lombok:${findProp("lombokVersion")}",
+        "org.mapstruct:mapstruct-processor:${findProp("mapstructVersion")}",
+        "org.projectlombok:lombok-mapstruct-binding:${findProp("lombokMapstructBindingVersion")}"
     )
 
     testImplementation(
         "io.quarkus:quarkus-junit5",
         "io.quarkus:quarkus-junit5-mockito"
     )
-    testCompileOnly("org.projectlombok:lombok:${properties["lombokVersion"]}")
+    testCompileOnly("org.projectlombok:lombok:${findProp("lombokVersion")}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -85,4 +85,10 @@ fun DependencyHandler.testImplementation(vararg deps: Any) {
     for (dep in deps) {
         add("testImplementation", dep)
     }
+}
+
+fun findProp(arg: String) : String {
+    val res = project.findProperty(arg)
+    requireNotNull(res)
+    return res.toString()
 }
